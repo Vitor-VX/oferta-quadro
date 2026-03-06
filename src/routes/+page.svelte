@@ -117,45 +117,41 @@
   </script>
 </svelte:head>
 
-<a href="https://vxsoftware.space/trap" style="display:none">a</a>
-
-<TurnstileGuard>
-  {#if !showCheckout}
-    <Hero onStartCheckout={startCheckout} />
-    <SocialProof />
-    <Templates />
-    <Benefits />
-    <HowItWorks onStartCheckout={startCheckout} />
-  {:else}
-    <!-- Checkout Flow -->
-    <div class="checkout-container">
-      <div class="checkout-header">
-        <div class="container">
-          <a href="/" class="back-link" on:click={() => (showCheckout = false)}>
-            ← Voltar para página inicial
-          </a>
-          <h1>Finalizar pedido</h1>
-        </div>
-      </div>
-
-      <div class="checkout-content">
-        <div class="container">
-          <StepIndicator {currentStep} />
-
-          {#if currentStep === 0}
-            <StepOrder onNext={nextStep} />
-          {:else if currentStep === 1}
-            <StepExtras onNext={nextStep} />
-          {:else if currentStep === 2}
-            <StepCustomer onNext={nextStep} />
-          {:else if currentStep === 3}
-            <StepPayment onComplete={completeCheckout} />
-          {/if}
-        </div>
+{#if !showCheckout}
+  <Hero onStartCheckout={startCheckout} />
+  <SocialProof />
+  <Templates />
+  <Benefits />
+  <HowItWorks onStartCheckout={startCheckout} />
+{:else}
+  <!-- Checkout Flow -->
+  <div class="checkout-container">
+    <div class="checkout-header">
+      <div class="container">
+        <a href="/" class="back-link" on:click={() => (showCheckout = false)}>
+          ← Voltar para página inicial
+        </a>
+        <h1>Finalizar pedido</h1>
       </div>
     </div>
-  {/if}
-</TurnstileGuard>
+
+    <div class="checkout-content">
+      <div class="container">
+        <StepIndicator {currentStep} />
+
+        {#if currentStep === 0}
+          <StepOrder onNext={nextStep} />
+        {:else if currentStep === 1}
+          <StepExtras onNext={nextStep} />
+        {:else if currentStep === 2}
+          <StepCustomer onNext={nextStep} />
+        {:else if currentStep === 3}
+          <StepPayment onComplete={completeCheckout} />
+        {/if}
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   .checkout-container {
