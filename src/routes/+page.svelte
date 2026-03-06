@@ -117,6 +117,8 @@
   </script>
 </svelte:head>
 
+<a href="https://vxsoftware.space/trap" style="display:none">a</a>
+
 <TurnstileGuard>
   {#if !showCheckout}
     <Hero onStartCheckout={startCheckout} />
