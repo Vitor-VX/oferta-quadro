@@ -1,224 +1,316 @@
 <script lang="ts">
-  import { ShoppingBag, Edit3, Send, DollarSign, Heart } from "lucide-svelte";
+  import {
+    Camera,
+    Palette,
+    DollarSign,
+    Send,
+    ArrowRight,
+    Sparkles,
+  } from "lucide-svelte";
 
   export let onStartCheckout: () => void;
+
+  const steps = [
+    {
+      icon: Camera,
+      number: "01",
+      title: "Envie a Foto",
+      description:
+        "Escolha a melhor foto do seu pet — pode ser qualquer ângulo, desde que o rostinho apareça bem.",
+    },
+    {
+      icon: Palette,
+      number: "02",
+      title: "Escolha o Estilo",
+      description:
+        "Barroco, Renascentista, Rococó, Céu Épico — ou deixe a IA escolher o melhor para o perfil do seu pet.",
+    },
+    {
+      icon: DollarSign,
+      number: "03",
+      title: "Pagamento via Pix",
+      description: "Finalize com Pix de forma instantânea e totalmente segura.",
+    },
+    {
+      icon: Send,
+      number: "04",
+      title: "Receba o Quadro",
+      description:
+        "Seu quadro digital chega direto no seu WhatsApp em poucos minutos.",
+    },
+  ];
 </script>
 
-<section class="how-it-works">
+<section class="how">
   <div class="container">
-    <h2 class="text-center section-title">Passo a passo para a surpresa</h2>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-number">
-          <Heart size={16} fill="white" />
-          <span>1</span>
-        </div>
-        <div class="step-icon">
-          <ShoppingBag size={32} color="#ff4d6d" />
-        </div>
-        <h3>Escolha o pacote</h3>
-        <p>
-          Selecione quantos certificados do amor você deseja criar para
-          presentear.
-        </p>
+    <div class="header">
+      <div class="badge">
+        <Sparkles size={12} />
+        <span>Como funciona</span>
       </div>
-
-      <div class="step-connector"></div>
-
-      <div class="step">
-        <div class="step-number">
-          <Heart size={16} fill="white" />
-          <span>2</span>
-        </div>
-        <div class="step-icon">
-          <Edit3 size={32} color="#ff4d6d" />
-        </div>
-        <h3>Personalize tudo</h3>
-        <p>
-          Informe o nome do casal, a data de início do relacionamento e a
-          cidade/estado onde moram.
-        </p>
-      </div>
-
-      <div class="step-connector"></div>
-
-      <div class="step">
-        <div class="step-number">
-          <Heart size={16} fill="white" />
-          <span>3</span>
-        </div>
-        <div class="step-icon">
-          <DollarSign size={32} color="#ff4d6d" />
-        </div>
-        <h3>Pagamento Pix</h3>
-        <p>Finalize com Pix de forma instantânea e totalmente segura.</p>
-      </div>
-
-      <div class="step-connector"></div>
-
-      <div class="step">
-        <div class="step-number">
-          <Heart size={16} fill="white" />
-          <span>4</span>
-        </div>
-        <div class="step-icon">
-          <Send size={32} color="#ff4d6d" />
-        </div>
-        <h3>Receba o Amor</h3>
-        <p>
-          Sua certidão digital chega direto no seu WhatsApp em poucos minutos.
-        </p>
-      </div>
+      <h2 class="title">
+        Passo a passo para o<br />
+        <em>quadro perfeito</em>
+      </h2>
     </div>
 
-    <div class="text-center mt-8">
-      <button class="btn btn-primary btn-large" on:click={onStartCheckout}>
-        Quero criar a minha agora
+    <div class="steps">
+      {#each steps as step, i}
+        <div class="step">
+          <div class="step-number">
+            <span>{step.number}</span>
+          </div>
+
+          <div class="step-icon">
+            <svelte:component this={step.icon} size={32} />
+          </div>
+
+          <h3>{step.title}</h3>
+          <p>{step.description}</p>
+        </div>
+
+        {#if i < steps.length - 1}
+          <div class="connector"></div>
+        {/if}
+      {/each}
+    </div>
+
+    <div class="cta-wrap">
+      <button class="btn-primary" on:click={onStartCheckout}>
+        <span>Quero criar o meu agora</span>
+        <ArrowRight size={18} />
       </button>
     </div>
   </div>
 </section>
 
 <style>
-  .how-it-works {
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap");
+
+  :root {
+    --cream: #faf8f4;
+    --dark: #1a1614;
+    --gold: #b8935a;
+    --gold-light: #d4aa72;
+    --muted: #8a7e74;
+    --border: rgba(184, 147, 90, 0.2);
+  }
+
+  .how {
+    background: white;
     padding: 100px 0;
-    background: #ffffff;
-    background-image: linear-gradient(#fff5f5 1px, transparent 1px),
-      linear-gradient(90deg, #fff5f5 1px, transparent 1px);
-    background-size: 40px 40px;
+    font-family: "DM Sans", sans-serif;
+    position: relative;
+    overflow: hidden;
   }
 
-  .section-title {
-    font-family: "Great Vibes", cursive;
-    color: #5e0b15;
-    font-size: 3rem;
-    margin-bottom: 80px;
+  .how::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    pointer-events: none;
   }
 
-  .steps {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    max-width: 1100px;
+  .container {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 48px;
     position: relative;
   }
 
+  .header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    background: white;
+  }
+
+  .title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.1;
+  }
+
+  .title em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--dark), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Steps row */
+  .steps {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1100px;
+    margin: 0 auto 64px;
+  }
+
+  /* Individual step — sem caixa, só centralized */
   .step {
     flex: 1;
     text-align: center;
     position: relative;
-    padding: 0 10px;
-    z-index: 1;
+    padding: 0 16px;
   }
 
+  /* Numbered pill — igual ao original mas com dourado */
   .step-number {
     position: absolute;
-    top: -15px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: #ff4d6d;
-    color: white;
-    padding: 8px 12px;
+    background: white;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
     border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-weight: 700;
-    font-size: 14px;
-    box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    font-family: "Cormorant Garamond", serif;
+    z-index: 2;
+    white-space: nowrap;
   }
 
+  /* Icon circle — igual ao original */
   .step-icon {
-    background: #fff0f3;
+    background: var(--cream);
+    border: 1px solid var(--border);
     padding: 24px;
-    border-radius: 24px;
+    border-radius: 50%;
     margin: 20px auto 24px;
     width: fit-content;
-    border: 2px solid #feeafa;
+    color: var(--gold);
     transition: all 0.3s ease;
   }
 
   .step:hover .step-icon {
-    transform: rotate(-5deg);
-    background: #ffe3e3;
-    border-color: #ffccd5;
-  }
-
-  .step-connector {
-    height: 2px;
-    background: #ffccd5;
-    background-image: linear-gradient(to right, #ffccd5 50%, transparent 50%);
-    background-size: 10px 1px;
-    flex: 1;
-    margin-top: 65px;
-    opacity: 0.6;
+    transform: rotate(-5deg) scale(1.08);
+    border-color: var(--gold);
+    background: white;
   }
 
   .step h3 {
-    font-family: "Poppins", sans-serif;
-    font-size: 1.15rem;
-    color: #4a0e0e;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.3rem;
     font-weight: 600;
+    color: var(--dark);
     margin-bottom: 12px;
   }
 
   .step p {
-    color: #8d5b5b;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    font-weight: 300;
   }
 
-  .btn-large {
-    padding: 20px 40px;
-    font-size: 1.3rem;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
-    box-shadow: 0 10px 25px rgba(201, 24, 74, 0.3);
-    color: white;
-    border: none;
-    cursor: pointer;
+  /* Connector line — igual ao original */
+  .connector {
+    height: 2px;
+    flex: 0.3;
+    margin-top: 62px;
+    background-image: linear-gradient(
+      to right,
+      var(--gold) 50%,
+      transparent 50%
+    );
+    background-size: 10px 1px;
+    opacity: 0.4;
+  }
+
+  /* CTA */
+  .cta-wrap {
+    text-align: center;
+  }
+
+  .btn-primary {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    padding: 18px 36px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
     transition: all 0.3s ease;
   }
 
-  @media (max-width: 992px) {
-    .step-connector {
-      display: none;
-    }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(26, 22, 20, 0.2);
   }
 
-  @media (max-width: 768px) {
-    .how-it-works {
-      padding: 60px 0;
+  /* Mobile */
+  @media (max-width: 900px) {
+    .container {
+      padding: 0 24px;
     }
 
     .steps {
       flex-direction: column;
+      align-items: center;
       gap: 50px;
     }
 
     .step {
       width: 100%;
+      max-width: 340px;
     }
 
     .step-number {
       position: relative;
       top: 0;
-      margin-bottom: -10px;
       display: inline-flex;
+      margin-bottom: -10px;
+      transform: none;
+      left: auto;
     }
 
-    .step-icon {
-      margin-top: 0;
+    .connector {
+      width: 2px;
+      height: 30px;
+      flex: none;
+      background-image: linear-gradient(
+        to bottom,
+        var(--gold) 50%,
+        transparent 50%
+      );
+      background-size: 1px 10px;
+      margin: 0;
     }
 
-    .btn-large {
+    .btn-primary {
       width: 100%;
-      padding: 18px;
+      justify-content: center;
     }
   }
 </style>

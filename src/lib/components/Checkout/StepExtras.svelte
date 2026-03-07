@@ -1,5 +1,6 @@
 <script lang="ts">
   import { checkoutStore, toggleExtra } from "$lib/stores/checkoutStore";
+  import { ArrowRight } from "lucide-svelte";
 
   export let onNext: () => void;
 
@@ -12,13 +13,12 @@
 
 <div class="step-extras">
   <div class="step-header">
-    <h2>Deixe o dia ainda mais especial</h2>
+    <h2>Deixe o quadro ainda <em>mais especial</em></h2>
     <p>Adicione extras opcionais ao seu pedido</p>
   </div>
 
   <div class="extras-list">
     {#each selectedExtras as extra}
-      <!-- Verifica se esse extra está incluso na coleção -->
       {@const includedInCollection =
         hasFullCollection && extra.id === "with_photo"}
 
@@ -27,12 +27,10 @@
           <div class="extra-info">
             <h3>
               {extra.name}
-
               {#if includedInCollection}
                 <span class="included-badge">Incluso na coleção</span>
               {/if}
             </h3>
-
             <p>{extra.description}</p>
           </div>
 
@@ -52,9 +50,7 @@
             disabled={includedInCollection}
             on:change={() => toggleExtra(extra.id)}
           />
-
           <span class="checkmark"></span>
-
           {#if includedInCollection}
             Incluso
           {:else}
@@ -67,49 +63,42 @@
 
   <div class="step-footer">
     <div class="total-amount">
-      <span>
-        Total: <strong>R$ {totalAmount.toFixed(2).replace(".", ",")}</strong>
-      </span>
+      <span
+        >Total: <strong>R$ {totalAmount.toFixed(2).replace(".", ",")}</strong
+        ></span
+      >
     </div>
-
-    <button class="btn-continue" on:click={onNext}> Continuar </button>
+    <button class="btn-continue" on:click={onNext}>
+      Continuar
+      <ArrowRight size={16} />
+    </button>
   </div>
 </div>
 
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap");
+
   .disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     pointer-events: none;
   }
 
   .included-badge {
     margin-left: 8px;
-    font-size: 0.75rem;
-    background: #d1fae5;
-    color: #065f46;
-    padding: 3px 8px;
-    border-radius: 999px;
-    font-weight: 600;
-  }
-
-  .btn-continue {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
-    box-shadow: 0 10px 25px rgba(201, 24, 74, 0.3);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    transition: all 0.3s ease;
+    font-size: 0.72rem;
+    background: #f5ede0;
+    color: #b8935a;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+    font-family: "DM Sans", sans-serif;
+    letter-spacing: 0.05em;
   }
 
   .step-extras {
     max-width: 600px;
     margin: 0 auto;
+    font-family: "DM Sans", sans-serif;
   }
 
   .step-header {
@@ -118,15 +107,26 @@
   }
 
   .step-header h2 {
-    font-family: "Great Vibes", cursive;
-    font-size: 3rem;
-    color: #4a0e0e;
-    margin-bottom: 16px;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2.8rem;
+    color: #2d2520;
+    margin-bottom: 12px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .step-header h2 em {
+    font-style: italic;
+    background: linear-gradient(90deg, #2d2520 0%, #b8935a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .step-header p {
-    color: #8d5b5b;
-    font-size: 1.1rem;
+    color: #8a7e74;
+    font-size: 1rem;
+    font-weight: 300;
   }
 
   .extras-list {
@@ -135,12 +135,21 @@
 
   .extra-card {
     margin-bottom: 16px;
-    border: 2px solid transparent;
+    border: 1px solid rgba(184, 147, 90, 0.2);
+    background: #faf8f4;
+    border-radius: 4px;
+    padding: 20px;
     transition: all 0.3s ease;
   }
 
   .extra-card:hover {
-    border-color: #667eea;
+    border-color: #b8935a;
+    box-shadow: 0 8px 24px rgba(184, 147, 90, 0.1);
+  }
+
+  .extra-card:has(input:checked) {
+    border-color: #b8935a;
+    background: #f5ede0;
   }
 
   .extra-content {
@@ -150,38 +159,33 @@
     margin-bottom: 16px;
   }
 
-  .extra-icon {
-    background: #fff0f3;
-    padding: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .extra-card:has(input:checked) .extra-icon {
-    background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
-    border-color: #ff4d6d;
-  }
-
   .extra-info {
     flex: 1;
   }
 
   .extra-info h3 {
-    font-size: 1.1rem;
-    color: #c9184a;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d2520;
     margin-bottom: 4px;
   }
 
   .extra-info p {
-    color: #8d5b5b;
-    font-size: 0.9rem;
+    color: #8a7e74;
+    font-size: 0.88rem;
     margin: 0;
+    font-weight: 300;
+    line-height: 1.5;
   }
 
   .extra-price {
-    font-weight: 600;
-    color: #4a0e0e;
-    font-size: 1.1rem;
+    font-weight: 500;
+    color: #b8935a;
+    font-size: 1rem;
+    white-space: nowrap;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.2rem;
   }
 
   .extra-checkbox {
@@ -189,7 +193,10 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 400;
+    font-size: 0.88rem;
+    color: #8a7e74;
+    letter-spacing: 0.03em;
   }
 
   .extra-checkbox input {
@@ -199,15 +206,17 @@
   .checkmark {
     width: 18px;
     height: 18px;
-    border: 2px solid #dbd2d1;
-    border-radius: 4px;
+    border: 1px solid rgba(184, 147, 90, 0.4);
+    border-radius: 2px;
     position: relative;
     transition: all 0.3s ease;
+    background: white;
+    flex-shrink: 0;
   }
 
   .extra-checkbox input:checked + .checkmark {
-    background: #c9184a;
-    border-color: #c9184a;
+    background: #2d2520;
+    border-color: #2d2520;
   }
 
   .extra-checkbox input:checked + .checkmark::after {
@@ -216,8 +225,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
-    font-size: 12px;
+    color: #d4aa72;
+    font-size: 11px;
     font-weight: bold;
   }
 
@@ -226,12 +235,41 @@
     justify-content: space-between;
     align-items: center;
     padding: 24px 0;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid rgba(184, 147, 90, 0.2);
   }
 
   .total-amount {
-    font-size: 1.2rem;
-    color: #2d3748;
+    font-size: 1rem;
+    color: #8a7e74;
+    font-weight: 300;
+  }
+
+  .total-amount strong {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2d2520;
+  }
+
+  .btn-continue {
+    padding: 14px 28px;
+    font-size: 0.9rem;
+    border-radius: 2px;
+    background: #2d2520;
+    color: #faf8f4;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-continue:hover {
+    background: #b8935a;
   }
 
   @media (max-width: 768px) {
@@ -249,6 +287,11 @@
       flex-direction: column;
       gap: 16px;
       text-align: center;
+    }
+
+    .btn-continue {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>

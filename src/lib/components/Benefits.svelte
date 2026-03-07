@@ -1,147 +1,221 @@
 <script lang="ts">
-  import { UserCheck, Zap, Shield, MessageSquare } from "lucide-svelte";
+  import { UserCheck, MessageSquare, Shield, Sparkles } from "lucide-svelte";
+
+  const benefits = [
+    {
+      icon: UserCheck,
+      title: "100% Personalizado",
+      description:
+        "Cada quadro é criado com base na foto do SEU pet — preservando a pelagem, padrão, cor dos olhos e expressão únicas dele.",
+      accent: "gold",
+    },
+    {
+      icon: MessageSquare,
+      title: "Entrega pelo WhatsApp",
+      description:
+        "Receba seu quadro digital poucos minutos após a confirmação, direto no seu <strong>WhatsApp</strong>.",
+      accent: "dark",
+    },
+    {
+      icon: Shield,
+      title: "Compra com Segurança",
+      description:
+        "Pagamento via Pix com processamento criptografado e garantia de entrega imediata.",
+      accent: "gold",
+    },
+  ];
 </script>
 
 <section class="benefits">
   <div class="container">
-    <h2 class="text-center section-title" style="">
-      Por que escolher nosso Certificado do Amor?
-    </h2>
-
-    <div class="grid grid-3">
-      <div class="benefit-card card">
-        <div class="benefit-icon icon-red">
-          <UserCheck size={40} />
-        </div>
-        <h3>100% Personalizado</h3>
-        <p>
-          Cada certificado é criado com o nome do casal, a data especial e a
-          cidade/estado informados por você.
-        </p>
+    <div class="header">
+      <div class="badge">
+        <Sparkles size={12} />
+        <span>Por que nos escolher</span>
       </div>
+      <h2 class="title">
+        Por que escolher nosso<br />
+        <em>Quadro de Pet?</em>
+      </h2>
+    </div>
 
-      <div class="benefit-card card">
-        <div class="benefit-icon icon-pink">
-          <MessageSquare size={40} />
-        </div>
-        <h3>Entrega Instantânea</h3>
-        <p>
-          Receba sua certidão digital poucos minutos após a confirmação, direto
-          no seu <strong>WhatsApp</strong>.
-        </p>
-      </div>
+    <div class="grid">
+      {#each benefits as benefit}
+        <div class="card">
+          <div class="icon-wrap" class:dark={benefit.accent === "dark"}>
+            <svelte:component this={benefit.icon} size={36} />
+          </div>
 
-      <div class="benefit-card card">
-        <div class="benefit-icon icon-gold">
-          <Shield size={40} />
+          <h3>{benefit.title}</h3>
+          <p>{@html benefit.description}</p>
         </div>
-        <h3>Amor com Segurança</h3>
-        <p>
-          Pagamento via Pix com processamento criptografado e garantia de
-          entrega imediata.
-        </p>
-      </div>
+      {/each}
     </div>
   </div>
 </section>
 
 <style>
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap");
+
+  :root {
+    --cream: #faf8f4;
+    --dark: #1a1614;
+    --gold: #b8935a;
+    --gold-light: #d4aa72;
+    --muted: #8a7e74;
+    --border: rgba(184, 147, 90, 0.2);
+  }
+
   .benefits {
+    background: white;
     padding: 100px 0;
-    background: #fffafa;
-    position: relative;
+    font-family: "DM Sans", sans-serif;
   }
 
-  .section-title {
-    font-family: "Great Vibes", cursive;
-    color: #5e0b15;
-    font-size: 3rem;
-    margin-bottom: 60px;
-    position: relative;
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
   }
 
-  .section-title::after {
-    content: "❤❤❤";
-    display: block;
-    font-size: 1rem;
-    color: #ff4d6d;
-    margin-top: 10px;
-    letter-spacing: 5px;
-  }
-
-  .benefit-card {
+  .header {
     text-align: center;
-    border: 1px solid #feeafa;
-    padding: 40px 30px;
-    background: #ffffff;
+    margin-bottom: 64px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.1;
+  }
+
+  .title em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--dark), var(--gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .card {
+    text-align: center;
+    padding: 48px 32px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
   }
 
-  .benefit-card:hover {
-    border-color: #ffccd5;
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(230, 57, 70, 0.08);
+  .card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
   }
 
-  .benefit-icon {
-    margin-bottom: 24px;
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(26, 22, 20, 0.07);
+    border-color: var(--gold);
+  }
+
+  .card:hover::after {
+    opacity: 1;
+  }
+
+  .icon-wrap {
     width: 80px;
     height: 80px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: transform 0.3s ease;
+    margin-bottom: 28px;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    transition: all 0.3s ease;
   }
 
-  .benefit-card:hover .benefit-icon {
-    transform: rotate(10deg) scale(1.1);
+  .icon-wrap.dark {
+    background: var(--dark);
+    color: var(--gold-light);
+    border-color: var(--dark);
   }
 
-  .icon-red {
-    background: #fff0f3;
-    color: #ff4d6d;
+  .card:hover .icon-wrap {
+    transform: rotate(8deg) scale(1.08);
   }
 
-  .icon-pink {
-    background: #fdf0f0;
-    color: #ff8fa3;
-  }
-
-  .icon-gold {
-    background: #fff9eb;
-    color: #d4af37;
-  }
-
-  .benefit-card h3 {
-    font-family: "Poppins", sans-serif;
-    color: #4a0e0e;
-    font-size: 1.4rem;
+  .card h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 1.5rem;
     font-weight: 600;
-    margin-bottom: 16px;
+    color: var(--dark);
+    margin-bottom: 14px;
   }
 
-  .benefit-card p {
-    color: #8d5b5b;
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 0;
+  .card p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .card p :global(strong) {
+    color: var(--dark);
+    font-weight: 500;
   }
 
   @media (max-width: 768px) {
     .benefits {
       padding: 60px 0;
     }
-
-    .section-title {
-      font-size: 2rem;
-      margin-bottom: 40px;
+    .container {
+      padding: 0 24px;
     }
-
-    .benefit-card {
-      padding: 30px 20px;
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .card {
+      padding: 36px 24px;
+    }
+    .card:hover {
+      transform: none;
     }
   }
 </style>

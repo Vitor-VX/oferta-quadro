@@ -164,11 +164,27 @@ export const resetCheckout = () => {
 export const products: Product[] = [
   {
     id: '1',
-    name: '1 Casal',
-    description: '1 certidão do amor personalizada',
-    price: 12.90,
-    oldPrice: 29.90,
+    name: '1 Pet',
+    description: '1 quadro de pet personalizado',
+    price: 27.00,
+    oldPrice: 47.00,
     quantity: 1
+  },
+  {
+    id: '2',
+    name: '2 Pets',
+    description: '2 quadros de pets personalizados',
+    price: 47.00,
+    oldPrice: 94.00,
+    quantity: 2
+  },
+  {
+    id: '3',
+    name: '3 Pets',
+    description: '3 quadros de pets personalizados',
+    price: 67.00,
+    oldPrice: 141.00,
+    quantity: 3
   }
 ];
 

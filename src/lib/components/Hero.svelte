@@ -1,292 +1,454 @@
 <script lang="ts">
-  import { HandHeart, Heart, Play } from "lucide-svelte";
   import { onMount } from "svelte";
+  import { Crown, Sparkles, ArrowRight } from "lucide-svelte";
 
   export let onStartCheckout: () => void;
 
   const carrosel = [
-    "https://files.botsync.site/CertPreview2.png",
-    "https://files.botsync.site/modelos-certificados/certificado_02_com_img.png",
-    "https://files.botsync.site/modelos-certificados/modelo_padrao.jpeg",
-    "https://files.botsync.site/modelos-certificados/certificado_02_sem_img.png"
+    "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
+    "https://files.botsync.site/quadros/img-sites/recoco.jpg",
+    "https://files.botsync.site/quadros/img-sites/renaissance.jpg",
+    "https://files.botsync.site/quadros/img-sites/sky_theme.jpg",
   ];
+
+  const styles = ["IA Escolhe", "Rococó", "Renascentista", "Céu Épico"];
 
   let current = 0;
   let interval: any;
+  let loaded = false;
 
   function next() {
     current = (current + 1) % carrosel.length;
   }
 
-  function prev() {
-    current = (current - 1 + carrosel.length) % carrosel.length;
-  }
-
   onMount(() => {
+    loaded = true;
     interval = setInterval(next, 3500);
-
     return () => clearInterval(interval);
   });
 </script>
 
 <section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <div class="badge">Eternize seu sentimento</div>
+  <!-- Background grain texture -->
+  <div class="grain"></div>
 
-      <h1 class="hero-title">
-        <span class="title-icon">
-          <Heart size={40} fill="currentColor" />
-        </span>
-        Sua Certidão de Namoro
-        <span class="title-icon">
-          <Heart size={40} fill="currentColor" />
-        </span>
+  <!-- Decorative lines -->
+  <div class="deco-line left"></div>
+  <div class="deco-line right"></div>
+
+  <div class="container" class:loaded>
+    <!-- Left: Text content -->
+    <div class="content">
+      <div class="badge">
+        <Crown size={12} />
+        <span>Imortaliza seu Pet</span>
+      </div>
+
+      <h1 class="title">
+        <span class="title-sub">Transforme uma foto em uma</span>
+        <span class="title-main">Obra-Prima</span>
+        <span class="title-end">do seu pet</span>
       </h1>
 
-      <p class="hero-subtitle">
-        Transforme sua história em um documento oficial do coração. Um presente
-        único, emocionante e eterno para o seu grande amor.
+      <p class="subtitle">
+        Enviou a foto, nós pintamos. Seu pet como nunca foi visto — em um
+        retrato digno de museu, no estilo dos Grandes Mestres.
       </p>
 
-      <div class="video-preview">
-        <div class="video-frame">
-          <div class="video-thumbnail carousel">
-            {#each carrosel as image, i}
-              <img
-                src={image}
-                alt="Prévia da Certidão"
-                class:active={i === current}
-              />
-            {/each}
+      <div class="styles-row">
+        {#each styles as style, i}
+          <span class="style-tag" class:active={i === current}>{style}</span>
+        {/each}
+      </div>
 
-            <div class="dots">
-              {#each carrosel as _, i}
-                <span
-                  class:active={i === current}
-                  on:click={() => (current = i)}
-                />
-              {/each}
-            </div>
-          </div>
+      <div class="cta-group">
+        <button class="btn-primary" on:click={onStartCheckout}>
+          <span>Criar meu Quadro Agora</span>
+          <ArrowRight size={18} />
+        </button>
+
+        <div class="price-block">
+          <span class="price-old">R$ 47,00</span>
+          <span class="price-new">R$ 27,00</span>
+          <span class="price-note">entrega digital em até 24h</span>
         </div>
       </div>
 
-      <div class="cta-section">
-        <button class="btn btn-primary btn-large" on:click={onStartCheckout}>
-          <HandHeart size={20} />
-          Criar Nossa Certidão Agora
-        </button>
-        <div class="price-container">
-          <p class="price-info">
-            De <span class="price-old">R$ 29,90</span> por apenas
-            <span class="price">R$ 12,90</span>
-          </p>
+      <div class="trust-row">
+        <div class="trust-item">
+          <span class="trust-icon">✦</span>
+          <span>Alta fidelidade</span>
         </div>
+        <div class="trust-item">
+          <span class="trust-icon">✦</span>
+          <span>4 estilos exclusivos</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">✦</span>
+          <span>Arquivo em alta resolução</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Carousel -->
+    <div class="carousel-wrapper">
+      <div class="frame-outer">
+        <div class="frame-corner tl"></div>
+        <div class="frame-corner tr"></div>
+        <div class="frame-corner bl"></div>
+        <div class="frame-corner br"></div>
+
+        <div class="carousel">
+          {#each carrosel as image, i}
+            <img src={image} alt={styles[i]} class:active={i === current} />
+          {/each}
+        </div>
+      </div>
+
+      <!-- Style label -->
+      <div class="style-label">
+        <Sparkles size={12} />
+        <span>{styles[current]}</span>
+      </div>
+
+      <!-- Dots -->
+      <div class="dots">
+        {#each carrosel as _, i}
+          <button
+            class="dot"
+            class:active={i === current}
+            on:click={() => (current = i)}
+            aria-label={styles[i]}
+          />
+        {/each}
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap");
+
+  :root {
+    --cream: #faf8f4;
+    --dark: #1a1614;
+    --gold: #b8935a;
+    --gold-light: #d4aa72;
+    --muted: #8a7e74;
+    --border: rgba(184, 147, 90, 0.2);
+  }
 
   .hero {
-    background: linear-gradient(180deg, #fff5f5 0%, #fff 100%);
-    color: #4a0e0e;
-    padding: 60px 0 100px 0;
-    text-align: center;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
     position: relative;
     overflow: hidden;
+    font-family: "DM Sans", sans-serif;
   }
 
-  .hero::before {
-    content: "❤";
+  /* Grain texture */
+  .grain {
     position: absolute;
-    top: 10%;
-    left: 5%;
-    font-size: 2rem;
-    color: #ffccd5;
-    opacity: 0.5;
-    animation: floating 3s ease-in-out infinite;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
   }
 
-  .hero::after {
-    content: "❤";
+  /* Decorative vertical lines */
+  .deco-line {
     position: absolute;
-    bottom: 10%;
-    right: 5%;
-    font-size: 2.5rem;
-    color: #ffccd5;
-    opacity: 0.5;
-    animation: floating 4s ease-in-out infinite;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      var(--border) 30%,
+      var(--border) 70%,
+      transparent
+    );
+  }
+  .deco-line.left {
+    left: 8%;
+  }
+  .deco-line.right {
+    right: 8%;
   }
 
-  @keyframes floating {
-    0% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
-  }
-
-  .badge {
-    background: #ffe3e3;
-    color: #e63946;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    display: inline-block;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 1px solid #ffb5a7;
-  }
-
-  .hero-title {
-    font-family: "Great Vibes", cursive;
-    color: #c9184a;
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    line-height: 1.1;
-  }
-
-  .title-icon {
-    color: #ff4d6d;
-    display: flex;
-    align-items: center;
-  }
-
-  .hero-subtitle {
-    font-size: 1.25rem;
-    color: #8d5b5b;
-    max-width: 650px;
-    margin: 0 auto 48px;
-    line-height: 1.6;
-  }
-
-  .video-frame {
-    display: inline-block;
-    padding: 12px;
-    background: white;
-    border-radius: 24px;
-    box-shadow: 0 20px 50px rgba(230, 57, 70, 0.15);
-    margin-bottom: 48px;
-  }
-
-  .video-thumbnail {
-    position: relative;
-    max-width: 280px;
+  .container {
+    max-width: 1200px;
     margin: 0 auto;
-    border-radius: 16px;
-    overflow: hidden;
-    cursor: pointer;
-    aspect-ratio: 9/16;
-    border: 2px solid #fff5f5;
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
 
-  .video-thumbnail img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .container.loaded {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  .pulse {
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);
-    }
-    70% {
-      box-shadow: 0 0 0 20px rgba(230, 57, 70, 0);
-    }
-    100% {
-      box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
-    }
-  }
-
-  .btn-large {
-    padding: 20px 40px;
-    font-size: 1.3rem;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
-    box-shadow: 0 10px 25px rgba(201, 24, 74, 0.3);
-    color: white;
-    border: none;
-    cursor: pointer;
+  /* Badge */
+  .badge {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 6px 16px;
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* Title */
+  .title {
+    font-family: "Cormorant Garamond", serif;
+    color: var(--dark);
+    margin-bottom: 24px;
+    line-height: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .title-main {
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 600;
+    font-style: italic;
+    color: var(--dark);
+    line-height: 0.9;
+    background: linear-gradient(135deg, var(--dark) 0%, var(--gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-end {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 300;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  /* Subtitle */
+  .subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  /* Style tags */
+  .styles-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+
+  .style-tag {
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.4s ease;
+    cursor: default;
+  }
+
+  .style-tag.active {
+    background: var(--dark);
+    color: var(--gold-light);
+    border-color: var(--dark);
+  }
+
+  /* CTA */
+  .cta-group {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--dark);
+    color: var(--cream);
+    border: none;
+    padding: 16px 28px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
   }
 
-  .btn-large:hover {
-    transform: scale(1.05);
-    box-shadow: 0 15px 35px rgba(201, 24, 74, 0.4);
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      transparent 0%,
+      rgba(184, 147, 90, 0.15) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
-  .price-container {
-    margin-top: 20px;
+  .btn-primary:hover {
+    background: #2d2520;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(26, 22, 20, 0.2);
   }
 
-  .price-info {
-    font-size: 1.1rem;
-    color: #8d5b5b;
+  .btn-primary:hover::after {
+    opacity: 1;
+  }
+
+  .price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   .price-old {
+    font-size: 0.8rem;
+    color: var(--muted);
     text-decoration: line-through;
-    opacity: 0.6;
-    font-size: 1rem;
-    margin: 0 5px;
   }
 
-  .price {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #c9184a;
-    display: block;
-    margin-top: 5px;
+  .price-new {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1;
   }
 
-  @media (max-width: 768px) {
-    .hero {
-      padding: 40px 0 60px 0;
+  .price-note {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Trust row */
+  .trust-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+
+  .trust-icon {
+    color: var(--gold);
+    font-size: 0.6rem;
+  }
+
+  /* Carousel */
+  .carousel-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
     }
-    .hero-title {
-      flex-direction: column;
-      gap: 0;
+    50% {
+      transform: translateY(-10px);
     }
-    .title-icon {
-      display: none;
-    }
-    .hero-subtitle {
-      font-size: 1.1rem;
-      padding: 0 10px;
-    }
-    .video-thumbnail {
-      max-width: 240px;
-    }
-    .btn-large {
-      width: 90%;
-      font-size: 1.1rem;
-      padding: 16px;
-    }
+  }
+
+  .frame-outer {
+    position: relative;
+    padding: 16px;
+    background: white;
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 20px 60px rgba(0, 0, 0, 0.12),
+      inset 0 0 0 1px rgba(184, 147, 90, 0.15);
+  }
+
+  /* Ornate corner decorations */
+  .frame-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+  .frame-corner.tl {
+    top: 6px;
+    left: 6px;
+    border-width: 1px 0 0 1px;
+  }
+  .frame-corner.tr {
+    top: 6px;
+    right: 6px;
+    border-width: 1px 1px 0 0;
+  }
+  .frame-corner.bl {
+    bottom: 6px;
+    left: 6px;
+    border-width: 0 0 1px 1px;
+  }
+  .frame-corner.br {
+    bottom: 6px;
+    right: 6px;
+    border-width: 0 1px 1px 0;
   }
 
   .carousel {
     position: relative;
+    width: 280px;
+    aspect-ratio: 3/4;
     overflow: hidden;
   }
 
@@ -297,38 +459,92 @@
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transform: scale(1.05);
+    transform: scale(1.04);
     transition:
-      opacity 0.6s ease,
-      transform 0.6s ease;
+      opacity 0.8s ease,
+      transform 0.8s ease;
   }
 
   .carousel img.active {
     opacity: 1;
     transform: scale(1);
-    position: relative;
+  }
+
+  .style-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--gold);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .dots {
-    position: absolute;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     gap: 8px;
   }
 
-  .dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+  .dot {
+    width: 20px;
+    height: 2px;
+    background: var(--border);
+    border: none;
     cursor: pointer;
     transition: all 0.3s ease;
+    padding: 0;
   }
 
-  .dots span.active {
-    background: #ff4d6d;
-    transform: scale(1.2);
+  .dot.active {
+    background: var(--gold);
+    width: 32px;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+      padding: 60px 24px;
+      gap: 48px;
+      text-align: center;
+    }
+
+    .badge {
+      margin: 0 auto 24px;
+    }
+    .subtitle {
+      margin: 0 auto 24px;
+    }
+    .styles-row {
+      justify-content: center;
+    }
+
+    .cta-group {
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+    .price-block {
+      align-items: center;
+    }
+    .trust-row {
+      justify-content: center;
+    }
+
+    .deco-line {
+      display: none;
+    }
+
+    .carousel-wrapper {
+      animation: none;
+    }
+    .carousel {
+      width: 220px;
+    }
   }
 </style>
