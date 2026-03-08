@@ -23,7 +23,7 @@
       number: "02",
       title: "Escolha o Estilo",
       description:
-        "Barroco, Renascentista, Rococó, Céu Épico — ou deixe a IA escolher o melhor para o perfil do seu pet.",
+        "Escolha entre 4 estilos clássicos — ou deixe a arte falar por si com a Obra Única.",
     },
     {
       icon: DollarSign,

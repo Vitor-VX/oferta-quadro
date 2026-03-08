@@ -166,7 +166,7 @@ export const products: Product[] = [
     id: '1',
     name: '1 Pet',
     description: '1 quadro de pet personalizado',
-    price: 27.00,
+    price: 19.90,
     oldPrice: 47.00,
     quantity: 1
   },
@@ -174,7 +174,7 @@ export const products: Product[] = [
     id: '2',
     name: '2 Pets',
     description: '2 quadros de pets personalizados',
-    price: 47.00,
+    price: 34.90,
     oldPrice: 94.00,
     quantity: 2
   },
@@ -182,32 +182,24 @@ export const products: Product[] = [
     id: '3',
     name: '3 Pets',
     description: '3 quadros de pets personalizados',
-    price: 67.00,
+    price: 49.90,
     oldPrice: 141.00,
     quantity: 3
   }
 ];
-
 export const extras: Extra[] = [
   {
     id: 'fast_delivery',
     name: 'Entrega super rápida',
-    description: 'Receba em até 10 segundos',
+    description: 'Receba em até 2 minutos.',
     price: 4.90,
     selected: false
   },
   {
-    id: 'with_photo',
-    name: 'Certificado do Amor Premium (2 em 1)',
-    description: 'Receba o certificado com foto do casal e também a versão sem foto.',
-    price: 6.90,
-    selected: false
-  },
-  {
-    id: 'collection',
-    name: 'Coleção Completa (Todos os Modelos)',
-    description: 'Receba todos os estilos do certificado: Minimalista e Clássico, com e sem foto. São 4 certificados para você escolher o seu favorito.',
-    price: 14.90,
+    id: 'all_styles',
+    name: 'Todos os 4 Estilos',
+    description: 'Receba o quadro do seu pet nos 4 estilos: Obra Única, Rococó, Renascentista e Céu Épico.',
+    price: 9.90,
     selected: false
   }
 ];

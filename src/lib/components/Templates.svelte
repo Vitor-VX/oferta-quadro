@@ -9,13 +9,13 @@
 
   const styles = [
     {
-      id: "baroque",
-      name: "Barroco Vermelho",
+      id: "sky",
+      name: "Céu Épico",
       tag: "Mais Pedido",
       description:
-        "Luz dramática de vela, drapeado de veludo vermelho e sombras profundas.",
-      before: "https://files.botsync.site/quadros/img-sites/recoco.jpg",
-      after: "https://files.botsync.site/quadros/img-sites/sky_theme.jpg",
+        "Céu tempestuoso e dramático ao fundo, manto real de arminho e pose de nobreza.",
+      before: "https://files.botsync.site/quadros/img-sites/sky_theme.jpg",
+      after: "https://files.botsync.site/quadros/img-sites/sky_theme_v.jpg",
     },
     {
       id: "renaissance",
@@ -24,7 +24,7 @@
       description:
         "Céu dramático ao fundo, luz dourada e composição dos grandes mestres.",
       before: "https://files.botsync.site/quadros/img-sites/renaissance.jpg",
-      after: "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
+      after: "https://files.botsync.site/quadros/img-sites/renaissance_v.jpg",
     },
     {
       id: "rococo",
@@ -33,7 +33,7 @@
       description:
         "Paleta suave, detalhes ornamentais e atmosfera da corte francesa.",
       before: "https://files.botsync.site/quadros/img-sites/recoco.jpg",
-      after: "https://files.botsync.site/quadros/img-sites/renaissance.jpg",
+      after: "https://files.botsync.site/quadros/img-sites/recoco_v.jpg",
     },
   ];
 
@@ -55,8 +55,9 @@
         Escolha o <em>Estilo</em><br />do seu Quadro
       </h2>
       <p class="subtitle">
-        Cada estilo é gerado com IA treinada nas técnicas dos grandes mestres da
-        pintura europeia. Clique em cada card para comparar os retratos.
+        Cada estilo é criado por designers especializados nas técnicas dos
+        grandes mestres da pintura europeia. Clique em cada card para comparar
+        os retratos.
       </p>
     </div>
 
@@ -121,7 +122,7 @@
     <div class="footer-note">
       <Sparkles size={14} />
       <span
-        >Não sabe qual escolher? Selecione <strong>IA Escolhe</strong> e deixamos
+        >Não sabe qual escolher? Selecione <strong>Obra Única</strong> e deixamos
         decidir pelo perfil do seu pet.</span
       >
     </div>

@@ -20,7 +20,7 @@
   const themes = [
     {
       id: "ai",
-      name: "IA Escolhe",
+      name: "Obra Única",
       preview: "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
     },
     {

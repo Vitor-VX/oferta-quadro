@@ -11,7 +11,7 @@
     "https://files.botsync.site/quadros/img-sites/sky_theme.jpg",
   ];
 
-  const styles = ["IA Escolhe", "Rococó", "Renascentista", "Céu Épico"];
+  const styles = ["Obra Única", "Rococó", "Renascentista", "Céu Épico"];
 
   let current = 0;
   let interval: any;
@@ -69,7 +69,7 @@
 
         <div class="price-block">
           <span class="price-old">R$ 47,00</span>
-          <span class="price-new">R$ 27,00</span>
+          <span class="price-new">R$ 19,90</span>
           <span class="price-note">entrega digital em até 24h</span>
         </div>
       </div>
