@@ -59,6 +59,8 @@
   });
 
   async function generatePixPayment() {
+    if (!selectedProduct) return;
+
     setPaymentStatus("generating");
 
     const upsell = selectedExtras
@@ -77,7 +79,7 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product: {
-            plan: "single",
+            plan: selectedProduct.id,
             extras: upsell,
             quadros: quadros,
           },
