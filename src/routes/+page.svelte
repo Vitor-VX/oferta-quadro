@@ -48,10 +48,10 @@
 </script>
 
 <svelte:head>
-  <title>Certificado do Amor – Presente Personalizado Digital</title>
+  <title>Quadro do PET – Imortalize seu PET</title>
   <meta
     name="description"
-    content="Surpreenda quem você ama com um Certificado do Amor personalizado. Um presente simbólico para celebrar histórias especiais, datas importantes e momentos únicos."
+    content="Imortalize seu PET com um quadro muito especial"
   />
   <link rel="icon" href={icon} />
 
@@ -79,7 +79,7 @@
       "script",
       "https://connect.facebook.net/en_US/fbevents.js",
     );
-    fbq("init", "875484495259675");
+    fbq("init", "3226584720855980");
     fbq("track", "PageView");
   </script>
 
@@ -88,14 +88,9 @@
       height="1"
       width="1"
       style="display:none"
-      src="https://www.facebook.com/tr?id=875484495259675&ev=PageView&noscript=1"
+      src="https://www.facebook.com/tr?id=3226584720855980&ev=PageView&noscript=1"
     />
   </noscript>
-
-  <script
-    async
-    src="https://www.googletagmanager.com/gtag/js?id=G-SHQ596VRV3"
-  ></script>
 
   <script
     src="https://cdn.utmify.com.br/scripts/utms/latest.js"
@@ -104,16 +99,6 @@
     async
     defer
   >
-  </script>
-
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag("js", new Date());
-
-    gtag("config", "G-SHQ596VRV3");
   </script>
 </svelte:head>
 
