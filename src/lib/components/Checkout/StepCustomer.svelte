@@ -43,6 +43,10 @@
   $: ({ selectedProduct, people, totalAmount, selectedExtras } =
     $checkoutStore);
 
+  $: hasAllStyles = selectedExtras.some(
+    (e) => e.selected && e.id === "all_styles",
+  );
+
   function sanitizeString(str: string) {
     if (!str) return "";
     return str
@@ -90,9 +94,18 @@
       return;
     }
 
-    const isMissingData = people.some((p) => !p.photo || !p.selectedTheme);
+    const isMissingData = people.some((p) => {
+      if (!p.photo) return true;
+      if (!hasAllStyles && !p.selectedTheme) return true;
+      return false;
+    });
+
     if (isMissingData) {
-      alert("Envie a foto e escolha um estilo para cada pet.");
+      alert(
+        hasAllStyles
+          ? "Envie a foto para cada pet."
+          : "Envie a foto e escolha um estilo para cada pet.",
+      );
       return;
     }
 
@@ -106,6 +119,12 @@
       name: sanitizeString(customerData.name),
       whatsapp: customerData.whatsapp.replace(/\D/g, ""),
     });
+
+    if (hasAllStyles) {
+      people.forEach((_, index) => {
+        updatePersonData(index, { selectedTheme: "" });
+      });
+    }
 
     onNext();
     track("initiate_checkout", { value: totalAmount });
@@ -153,29 +172,36 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Estilo do Quadro</label>
-            <div class="themes-grid">
-              {#each themes as theme}
-                <button
-                  type="button"
-                  class="theme-option"
-                  class:selected={person.selectedTheme === theme.id}
-                  on:click={() => handleThemeSelect(index, theme.id)}
-                >
-                  <div class="theme-img-wrap">
-                    <img src={theme.preview} alt={theme.name} />
-                    {#if person.selectedTheme === theme.id}
-                      <div class="theme-overlay">
-                        <Check size={20} color="white" strokeWidth={2.5} />
-                      </div>
-                    {/if}
-                  </div>
-                  <span class="theme-name">{theme.name}</span>
-                </button>
-              {/each}
+          {#if !hasAllStyles}
+            <div class="form-group">
+              <label>Estilo do Quadro</label>
+              <div class="themes-grid">
+                {#each themes as theme}
+                  <button
+                    type="button"
+                    class="theme-option"
+                    class:selected={person.selectedTheme === theme.id}
+                    on:click={() => handleThemeSelect(index, theme.id)}
+                  >
+                    <div class="theme-img-wrap">
+                      <img src={theme.preview} alt={theme.name} />
+                      {#if person.selectedTheme === theme.id}
+                        <div class="theme-overlay">
+                          <Check size={20} color="white" strokeWidth={2.5} />
+                        </div>
+                      {/if}
+                    </div>
+                    <span class="theme-name">{theme.name}</span>
+                  </button>
+                {/each}
+              </div>
             </div>
-          </div>
+          {:else}
+            <div class="all-styles-badge">
+              <Check size={14} />
+              Todos os 4 estilos serão gerados para este pet
+            </div>
+          {/if}
         </div>
       {/each}
 
@@ -321,7 +347,6 @@
     font-weight: 300;
   }
 
-  /* Pet card */
   .pet-card {
     background: var(--cream);
     border: 1px solid var(--border);
@@ -345,7 +370,19 @@
     letter-spacing: 0.1em;
   }
 
-  /* Form */
+  .all-styles-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5ede0;
+    border: 1px solid var(--border);
+    color: var(--gold);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
   .form-group {
     margin-bottom: 20px;
   }
@@ -386,7 +423,6 @@
     gap: 16px;
   }
 
-  /* Photo upload */
   .file-input-label {
     display: flex;
     flex-direction: column;
@@ -456,7 +492,6 @@
     line-height: 1;
   }
 
-  /* Themes */
   .themes-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -522,7 +557,6 @@
     letter-spacing: 0.02em;
   }
 
-  /* Customer section */
   .customer-section {
     margin-top: 32px;
   }
@@ -539,7 +573,6 @@
     margin-bottom: 20px;
   }
 
-  /* Checkbox */
   .checkbox-group {
     margin-top: 20px;
     background: #f5ede0;
@@ -582,7 +615,6 @@
     color: var(--gold-light);
   }
 
-  /* Submit */
   .form-actions {
     margin-top: 24px;
   }
@@ -606,7 +638,6 @@
     background: var(--gold);
   }
 
-  /* Summary */
   .order-summary {
     position: sticky;
     top: 20px;
