@@ -18,14 +18,7 @@ export interface Extra {
 }
 
 export interface PersonData {
-  name1: string;
-  name2: string;
-  name: string;
-  startDate: string;
-  cityName: string;
-  stateName: string;
-  city: string;
-  photo?: string;
+  photo: string;
   selectedTheme: string;
 }
 
@@ -75,13 +68,7 @@ export const setCurrentStep = (step: number) => {
 export const selectProduct = (product: Product) => {
   checkoutStore.update(state => {
     const people = Array.from({ length: product.quantity }, () => ({
-      name1: '',
-      name2: '',
-      name: '',
-      startDate: '',
-      cityName: '',
-      stateName: '',
-      city: '',
+      photo: '',
       selectedTheme: ''
     }));
 
@@ -101,10 +88,6 @@ export const toggleExtra = (extraId: string) => {
     let updatedExtras = state.selectedExtras.map(extra => {
       if (extra.id === extraId) {
         return { ...extra, selected: !extra.selected };
-      }
-
-      if (extraId === 'collection' && extra.id === 'with_photo') {
-        return { ...extra, selected: false };
       }
 
       return extra;
@@ -163,7 +146,7 @@ export const resetCheckout = () => {
 
 export const products: Product[] = [
   {
-    id: '1',
+    id: 'single',
     name: '1 Pet',
     description: '1 quadro de pet personalizado',
     price: 19.90,
@@ -171,18 +154,18 @@ export const products: Product[] = [
     quantity: 1
   },
   {
-    id: '2',
+    id: 'double',
     name: '2 Pets',
     description: '2 quadros de pets personalizados',
-    price: 34.90,
+    price: 29.90,
     oldPrice: 94.00,
     quantity: 2
   },
   {
-    id: '3',
+    id: 'triple',
     name: '3 Pets',
     description: '3 quadros de pets personalizados',
-    price: 49.90,
+    price: 39.90,
     oldPrice: 141.00,
     quantity: 3
   }
@@ -199,7 +182,7 @@ export const extras: Extra[] = [
     id: 'all_styles',
     name: 'Todos os 4 Estilos',
     description: 'Receba o quadro do seu pet nos 4 estilos: Obra Única, Rococó, Renascentista e Céu Épico.',
-    price: 9.90,
+    price: 10.90,
     selected: false
   }
 ];

@@ -65,16 +65,13 @@
       .filter((el) => el.selected)
       .map((el) => el.id);
 
-    const certificates = people.map((el) => ({
-      couple: el.name,
-      startDate: el.startDate,
-      city: el.city,
+    const quadros = people.map((el) => ({
       photo: el.photo,
       theme: el.selectedTheme,
     }));
 
     const request = await fetch(
-      "https://vxsoftware.space/api/v1/offers/certificate/orders/create",
+      "https://vxsoftware.space/api/v1/offers/quadro-pet/orders/create",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -82,7 +79,7 @@
           product: {
             plan: "single",
             extras: upsell,
-            certificates,
+            quadros: quadros,
           },
           name: customerData.name,
           whatsapp: customerData.whatsapp,
@@ -105,7 +102,7 @@
     if (!token) return;
 
     const res = await fetch(
-      "https://vxsoftware.space/api/v1/offers/certificate/orders/current",
+      "https://vxsoftware.space/api/v1/offers/quadro-pet/orders/current",
       {
         headers: { Authorization: `Bearer ${token}` },
       },

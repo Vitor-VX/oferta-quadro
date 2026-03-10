@@ -114,21 +114,18 @@
 
 <div class="step-customer">
   <div class="content-wrapper">
-    <!-- Left: Form -->
     <div class="form-section">
       <div class="section-header">
         <h2>Personalize seu <em>Quadro</em></h2>
         <p>Envie a foto e escolha o estilo — cuidamos do resto.</p>
       </div>
 
-      <!-- One card per pet -->
       {#each people as person, index}
         <div class="pet-card">
           <div class="pet-card-header">
             <span class="badge">Pet {index + 1}</span>
           </div>
 
-          <!-- Photo upload -->
           <div class="form-group">
             <label><Camera size={14} /> Foto do Pet</label>
             <div class="photo-upload-container">
@@ -156,7 +153,6 @@
             </div>
           </div>
 
-          <!-- Theme selection -->
           <div class="form-group">
             <label>Estilo do Quadro</label>
             <div class="themes-grid">
@@ -183,7 +179,6 @@
         </div>
       {/each}
 
-      <!-- Customer data -->
       <div class="customer-section">
         <p class="customer-section-title">
           <Mail size={14} /> Informações de Envio
@@ -239,7 +234,6 @@
       </div>
     </div>
 
-    <!-- Right: Summary -->
     <div class="summary-section">
       <div class="order-summary">
         <h3>Resumo do Pedido</h3>
@@ -301,7 +295,6 @@
     align-items: start;
   }
 
-  /* Header */
   .section-header {
     margin-bottom: 32px;
   }
