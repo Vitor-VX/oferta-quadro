@@ -122,8 +122,8 @@
     <div class="footer-note">
       <Sparkles size={14} />
       <span
-        >Não sabe qual escolher? Selecione <strong>Obra Única</strong> e deixamos
-        decidir pelo perfil do seu pet.</span
+        >Não sabe qual escolher? Selecione <strong>Céu Épico</strong> que é o mais
+        popular entre os clientes.</span
       >
     </div>
   </div>

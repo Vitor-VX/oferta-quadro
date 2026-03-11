@@ -5,13 +5,13 @@
   export let onStartCheckout: () => void;
 
   const carrosel = [
-    "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
+    // "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
     "https://files.botsync.site/quadros/img-sites/recoco.jpg",
     "https://files.botsync.site/quadros/img-sites/renaissance.jpg",
     "https://files.botsync.site/quadros/img-sites/sky_theme.jpg",
   ];
 
-  const styles = ["Obra Única", "Rococó", "Renascentista", "Céu Épico"];
+  const styles = [/*"Obra Única",*/ "Rococó", "Renascentista", "Céu Épico"];
 
   let current = 0;
   let interval: any;
@@ -81,7 +81,7 @@
         </div>
         <div class="trust-item">
           <span class="trust-icon">✦</span>
-          <span>4 estilos exclusivos</span>
+          <span>3 estilos exclusivos</span>
         </div>
         <div class="trust-item">
           <span class="trust-icon">✦</span>

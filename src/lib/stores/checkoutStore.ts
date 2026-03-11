@@ -180,8 +180,8 @@ export const extras: Extra[] = [
   },
   {
     id: 'all_styles',
-    name: 'Todos os 4 Estilos',
-    description: 'Receba o quadro do seu pet nos 4 estilos: Obra Única, Rococó, Renascentista e Céu Épico.',
+    name: 'Todos os 3 Estilos',
+    description: 'Receba o quadro do seu pet nos 3 estilos: Rococó, Renascentista e Céu Épico.',
     price: 10.90,
     selected: false
   }

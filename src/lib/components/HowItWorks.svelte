@@ -23,7 +23,7 @@
       number: "02",
       title: "Escolha o Estilo",
       description:
-        "Escolha entre 4 estilos clássicos — ou deixe a arte falar por si com a Obra Única.",
+        "Escolha entre 3 estilos clássicos.",
     },
     {
       icon: DollarSign,

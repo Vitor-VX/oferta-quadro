@@ -18,11 +18,11 @@
   let confirmWhatsapp = false;
 
   const themes = [
-    {
-      id: "ai",
-      name: "Obra Única",
-      preview: "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
-    },
+    // {
+    //   id: "ai",
+    //   name: "Obra Única",
+    //   preview: "https://files.botsync.site/quadros/img-sites/ai_option.jpg",
+    // },
     {
       id: "rococo",
       name: "Rococó",
@@ -199,7 +199,7 @@
           {:else}
             <div class="all-styles-badge">
               <Check size={14} />
-              Todos os 4 estilos serão gerados para este pet
+              Todos os 3 estilos serão gerados para este pet
             </div>
           {/if}
         </div>
