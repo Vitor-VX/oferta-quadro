@@ -149,7 +149,7 @@ export const products: Product[] = [
     id: 'single',
     name: '1 Pet',
     description: '1 quadro de pet personalizado',
-    price: 9.90,
+    price: 19.90,
     oldPrice: 47.00,
     quantity: 1
   },
