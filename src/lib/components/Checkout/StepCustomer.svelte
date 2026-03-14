@@ -6,6 +6,7 @@
     updatePersonData,
   } from "$lib/stores/checkoutStore";
   import { track } from "$lib/track/meta";
+  import Steppaymentmethod from "../Steppaymentmethod.svelte";
 
   export let onNext: () => void;
 
@@ -125,9 +126,96 @@
         updatePersonData(index, { selectedTheme: "" });
       });
     }
-
     onNext();
     track("initiate_checkout", { value: totalAmount });
+  }
+
+  async function handleCard(data: any) {
+    if (!selectedExtras || !selectedProduct) return;
+
+    if (!customerData.email || !customerData.name || !customerData.whatsapp) {
+      alert("Por favor, preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (!isValidBrazilWhatsapp(customerData.whatsapp)) {
+      alert("Digite um WhatsApp válido com DDD e número iniciando com 9.");
+      return;
+    }
+
+    const isMissingData = people.some((p) => {
+      if (!p.photo) return true;
+      if (!hasAllStyles && !p.selectedTheme) return true;
+      return false;
+    });
+
+    if (isMissingData) {
+      alert(
+        hasAllStyles
+          ? "Envie a foto para cada pet."
+          : "Envie a foto e escolha um estilo para cada pet.",
+      );
+      return;
+    }
+
+    if (!confirmWhatsapp) {
+      alert("Por favor, confirme que seu WhatsApp está correto.");
+      return;
+    }
+
+    updateCustomerData({
+      ...customerData,
+      name: sanitizeString(customerData.name),
+      whatsapp: customerData.whatsapp.replace(/\D/g, ""),
+    });
+
+    if (hasAllStyles) {
+      people.forEach((_, index) => {
+        updatePersonData(index, { selectedTheme: "" });
+      });
+    }
+
+    track("initiate_checkout", { value: totalAmount });
+
+    const upsell = selectedExtras
+      .filter((el) => el.selected)
+      .map((el) => el.id);
+
+    const quadros = people.map((el) => ({
+      photo: el.photo,
+      theme: el.selectedTheme,
+    }));
+
+    // console.log({
+    //   product: {
+    //     plan: selectedProduct.id,
+    //     extras: upsell,
+    //     quadros: quadros,
+    //   },
+    //   name: $checkoutStore.customerData.name,
+    //   whatsapp: $checkoutStore.customerData.whatsapp,
+    //   email: $checkoutStore.customerData.email,
+    //   card: data,
+    // });
+
+    await fetch(
+      "https://vxsoftware.space/api/v1/offers/quadro-pet/orders/paymentCard",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: {
+            plan: selectedProduct.id,
+            extras: upsell,
+            quadros: quadros,
+          },
+          name: $checkoutStore.customerData.name,
+          whatsapp: $checkoutStore.customerData.whatsapp,
+          email: $checkoutStore.customerData.email,
+          card: data,
+        }),
+      },
+    );
   }
 </script>
 
@@ -253,11 +341,14 @@
         </div>
       </div>
 
-      <div class="form-actions">
-        <button class="btn-submit" on:click={handleSubmit}>
-          Gerar Quadro &amp; Pagar
-        </button>
-      </div>
+      <Steppaymentmethod
+        {totalAmount}
+        pixDiscount={0}
+        onPix={() => handleSubmit()}
+        onCard={async (data) => {
+          handleCard(data);
+        }}
+      />
     </div>
 
     <div class="summary-section">

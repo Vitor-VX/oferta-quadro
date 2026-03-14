@@ -93,8 +93,8 @@
     const response = await request.json();
     const { payment, token } = response.data;
     const { qrCode, qrCodeBase64 } = payment;
-
-    setPixData(qrCode, `data:imagepng;base64,${qrCodeBase64}`);
+    
+    setPixData(qrCode, `data:image/png;base64,${qrCodeBase64}`);
     setPaymentStatus("waiting");
     localStorage.setItem("order-payment", token);
   }
