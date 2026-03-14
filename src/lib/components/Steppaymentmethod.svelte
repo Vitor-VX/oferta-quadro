@@ -1,59 +1,24 @@
 <script lang="ts">
-    /**
-     * StepPaymentMethod — seletor de pagamento com tema customizável
-     *
-     * Props obrigatórias:
-     *   totalAmount  : number
-     *   onPix        : () => void
-     *   onCard       : (formData: CardFormData) => void
-     *
-     * Props de tema (todas opcionais — tem defaults):
-     *   theme        : PaymentTheme
-     */
-
-    import { onMount, onDestroy } from "svelte";
-    import { PUBLIC_MERCADO_PAGO_KEY } from "$env/static/public";
-    import { CreditCard, QrCode, Lock, ChevronDown } from "lucide-svelte";
+    import { QrCode, Lock, CreditCard, ExternalLink } from "lucide-svelte";
 
     export interface PaymentTheme {
-        /** Cor de fundo dos painéis */
         bgPanel?: string;
-        /** Cor primária (botões, dots, tab ativa) */
         colorPrimary?: string;
-        /** Cor de texto sobre primária */
         colorOnPrimary?: string;
-        /** Cor de acento / destaque (badges, savings, hover) */
         colorAccent?: string;
-        /** Cor de texto sobre acento */
         colorOnAccent?: string;
-        /** Cor do texto principal */
         colorText?: string;
-        /** Cor do texto secundário/muted */
         colorMuted?: string;
-        /** Cor da borda */
         colorBorder?: string;
-        /** Família de fonte para valores/display */
         fontDisplay?: string;
-        /** Família de fonte para o corpo */
         fontBody?: string;
-    }
-
-    export interface CardFormData {
-        token: string;
-        paymentMethodId: string;
-        issuerId: string;
-        installments: number;
-        identificationNumber: string;
-        identificationType: string;
     }
 
     export let totalAmount: number;
     export let onPix: () => void;
-    export let onCard: (formData: CardFormData) => void;
+    export let onCard: () => Promise<string | null>;
     export let currency = "R$";
     export let pixDiscount = 0;
-    export let publicKey: string = PUBLIC_MERCADO_PAGO_KEY ?? "";
-
     export let theme: PaymentTheme = {};
 
     $: t = {
@@ -71,11 +36,8 @@
 
     type Method = "pix" | "card";
     let selected: Method = "pix";
-    let cardFormInstance: any = null;
-    let mpLoaded = false;
     let submitting = false;
     let cardError = "";
-    $: loadingInstallments = false;
 
     $: pixAmount =
         pixDiscount > 0 ? totalAmount * (1 - pixDiscount / 100) : totalAmount;
@@ -84,99 +46,25 @@
         return `${currency} ${val.toFixed(2).replace(".", ",")}`;
     }
 
-    async function mountCardForm() {
-        if (mpLoaded || selected !== "card") return;
-        try {
-            const { loadMercadoPago } = await import("@mercadopago/sdk-js");
-            await loadMercadoPago();
-            mpLoaded = true;
-
-            const mp = new (window as any).MercadoPago(publicKey, {
-                locale: "pt-BR",
-            });
-
-            cardFormInstance = mp.cardForm({
-                amount: String(totalAmount),
-                iframe: true,
-                form: {
-                    id: "mp-card-form",
-                    cardNumber: {
-                        id: "mp__cardNumber",
-                        placeholder: "0000 0000 0000 0000",
-                    },
-                    expirationDate: {
-                        id: "mp__expirationDate",
-                        placeholder: "MM/AA",
-                    },
-                    securityCode: {
-                        id: "mp__securityCode",
-                        placeholder: "CVV",
-                    },
-                    cardholderName: {
-                        id: "mp__cardholderName",
-                        placeholder: "Nome como no cartão",
-                    },
-                    issuer: { id: "mp__issuer" },
-                    installments: { id: "mp__installments" },
-                    identificationType: { id: "mp__identificationType" },
-                    identificationNumber: {
-                        id: "mp__identificationNumber",
-                        placeholder: "000.000.000-00",
-                    },
-                },
-                callbacks: {
-                    onFetching: (resource: string) => {
-                        if (resource.includes("installments")) {
-                            loadingInstallments = true;
-                        }
-                    },
-                    onFormMounted: (err: unknown) => {
-                        if (err) console.error("CardForm mount error:", err);
-                    },
-                    onSubmit: async (event: Event) => {
-                        event.preventDefault();
-                        submitting = true;
-                        cardError = "";
-                        try {
-                            const data =
-                                cardFormInstance.getCardFormData() as CardFormData;
-                            await onCard(data);
-                        } catch (e: any) {
-                            cardError =
-                                e?.message ?? "Erro ao processar o cartão.";
-                        } finally {
-                            submitting = false;
-                        }
-                    },
-                },
-            });
-        } catch (e) {
-            console.error("Erro ao carregar MP SDK:", e);
-        }
-    }
-
-    function unmountCardForm() {
-        try {
-            cardFormInstance?.unmount();
-        } catch {}
-        cardFormInstance = null;
-        mpLoaded = false;
-        loadingInstallments = false;
-    }
-
     function selectMethod(m: Method) {
         if (m === selected) return;
-        if (selected === "card") unmountCardForm();
+        cardError = "";
         selected = m;
-        if (m === "card") setTimeout(mountCardForm, 50);
     }
 
-    onMount(() => {
-        if (selected === "card") mountCardForm();
-    });
-    onDestroy(() => {
-        unmountCardForm();
-    });
+    async function handleCard() {
+        submitting = true;
+        cardError = "";
+        try {
+            const url = await onCard();
+            if (!url) return;
+            window.location.href = url;
+        } catch (e: any) {
+            cardError = e?.message ?? "Erro ao gerar link de pagamento.";
+        } finally {
+            submitting = false;
+        }
+    }
 </script>
 
 <div
@@ -194,6 +82,7 @@
         --font-body:        {t.fontBody};
     "
 >
+    <!-- Tabs -->
     <div class="tabs">
         <button
             class="tab"
@@ -243,86 +132,43 @@
 
     {#if selected === "card"}
         <div class="panel">
-            <form id="mp-card-form" on:submit|preventDefault>
-                <div class="field-group">
-                    <label for="mp__cardNumber">Número do Cartão</label>
-                    <div id="mp__cardNumber" class="mp-field"></div>
+            <div class="card-info">
+                <div class="card-info-icon">
+                    <CreditCard size={32} />
                 </div>
+                <p class="card-info-title">Pague com Cartão de Crédito</p>
+                <p class="card-info-desc">
+                    Você será redirecionado para a página segura do Mercado Pago
+                    para concluir o pagamento.
+                </p>
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="mp__expirationDate">Validade</label>
-                        <div id="mp__expirationDate" class="mp-field"></div>
-                    </div>
-                    <div class="field-group">
-                        <label for="mp__securityCode">CVV</label>
-                        <div id="mp__securityCode" class="mp-field"></div>
-                    </div>
+                <div class="card-flags">
+                    <span class="flag">Visa</span>
+                    <span class="flag">Master</span>
+                    <span class="flag">Elo</span>
+                    <span class="flag">Amex</span>
                 </div>
+            </div>
 
-                <div class="field-group">
-                    <label for="mp__cardholderName">Nome no Cartão</label>
-                    <input
-                        id="mp__cardholderName"
-                        class="field-input"
-                        placeholder="Nome como no cartão"
-                    />
-                </div>
+            {#if cardError}
+                <div class="card-error">{cardError}</div>
+            {/if}
 
-                <div class="field-row">
-                    <div class="field-group">
-                        <label for="mp__identificationType">Documento</label>
-                        <div class="select-wrap">
-                            <select
-                                id="mp__identificationType"
-                                class="field-input"
-                            ></select>
-                            <ChevronDown size={14} class="select-icon" />
-                        </div>
-                    </div>
-                    <div class="field-group">
-                        <label for="mp__identificationNumber">CPF / CNPJ</label>
-                        <input
-                            id="mp__identificationNumber"
-                            class="field-input"
-                            placeholder="000.000.000-00"
-                        />
-                    </div>
-                </div>
-
-                <div class="field-group" style="display:none">
-                    <select id="mp__issuer" class="field-input"></select>
-                </div>
-
-                <div
-                    class="field-group"
-                    style:display={loadingInstallments ? "block" : "none"}
-                >
-                    <label for="mp__installments">Parcelas</label>
-                    <div class="select-wrap">
-                        <select id="mp__installments" class="field-input"
-                        ></select>
-                        <ChevronDown size={14} class="select-icon" />
-                    </div>
-                </div>
-
-                {#if cardError}
-                    <div class="card-error">{cardError}</div>
+            <button
+                class="btn-primary"
+                on:click={handleCard}
+                disabled={submitting}
+            >
+                {#if submitting}
+                    <span class="spinner"></span> Gerando link...
+                {:else}
+                    <ExternalLink size={16} /> Pagar {fmt(totalAmount)} com Cartão
                 {/if}
+            </button>
 
-                <button type="submit" class="btn-primary" disabled={submitting}>
-                    {#if submitting}
-                        <span class="spinner"></span> Processando...
-                    {:else}
-                        <Lock size={16} /> Pagar {fmt(totalAmount)}
-                    {/if}
-                </button>
-
-                <div class="secure-row">
-                    <Lock size={11} /> Dados criptografados · Powered by Mercado
-                    Pago
-                </div>
-            </form>
+            <div class="secure-row">
+                <Lock size={11} /> Ambiente seguro · Powered by Mercado Pago
+            </div>
         </div>
     {/if}
 </div>
@@ -390,6 +236,7 @@
         padding: 24px;
     }
 
+    /* Pix */
     .pix-info {
         display: flex;
         flex-direction: column;
@@ -420,72 +267,55 @@
         flex-shrink: 0;
     }
 
-    .field-group {
-        margin-bottom: 14px;
+    /* Card info */
+    .card-info {
+        text-align: center;
+        margin-bottom: 24px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--color-border);
     }
 
-    .field-group label {
-        display: block;
-        font-size: 0.68rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+    .card-info-icon {
+        color: var(--color-accent);
+        margin-bottom: 12px;
+    }
+
+    .card-info-title {
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 600;
         color: var(--color-text);
-        margin-bottom: 6px;
+        margin: 0 0 8px;
     }
 
-    .mp-field {
-        height: 42px;
-        border: 1px solid var(--color-border);
-        border-radius: 2px;
-        background: white;
-        padding: 0 12px;
-        transition: border 0.2s;
-    }
-
-    .mp-field:focus-within {
-        border-color: var(--color-accent);
-    }
-
-    .field-input {
-        width: 100%;
-        height: 42px;
-        padding: 0 12px;
-        border: 1px solid var(--color-border);
-        border-radius: 2px;
-        background: white;
-        font-family: inherit;
-        font-size: 0.88rem;
-        color: var(--color-text);
-        outline: none;
-        transition: border 0.2s;
-        box-sizing: border-box;
-        appearance: none;
-    }
-
-    .field-input:focus {
-        border-color: var(--color-accent);
-    }
-
-    .field-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-    }
-
-    .select-wrap {
-        position: relative;
-    }
-
-    .select-wrap :global(.select-icon) {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        pointer-events: none;
+    .card-info-desc {
+        font-size: 0.83rem;
         color: var(--color-muted);
+        font-weight: 300;
+        line-height: 1.5;
+        margin: 0 0 16px;
     }
 
+    .card-flags {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .flag {
+        background: white;
+        border: 1px solid var(--color-border);
+        color: var(--color-muted);
+        font-size: 0.68rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 2px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    /* Erro */
     .card-error {
         background: #fff5f5;
         border: 1px solid #fed7d7;
@@ -496,6 +326,7 @@
         margin-bottom: 14px;
     }
 
+    /* Botão */
     .btn-primary {
         display: flex;
         align-items: center;
@@ -506,14 +337,13 @@
         background: var(--color-primary);
         color: var(--color-on-primary);
         border: none;
-        border-radius: 2px;
+        border-radius: 20px;
         font-family: inherit;
         font-size: 0.95rem;
         font-weight: 500;
         letter-spacing: 0.04em;
         cursor: pointer;
         transition: background 0.25s;
-        border-radius: 20px;
         margin-top: 4px;
     }
 
@@ -521,6 +351,7 @@
         background: var(--color-accent);
         color: var(--color-on-accent);
     }
+
     .btn-primary:disabled {
         opacity: 0.6;
         cursor: not-allowed;
@@ -555,8 +386,8 @@
     }
 
     @media (max-width: 480px) {
-        .field-row {
-            grid-template-columns: 1fr;
+        .card-flags {
+            gap: 6px;
         }
     }
 </style>

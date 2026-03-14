@@ -130,7 +130,7 @@
     track("initiate_checkout", { value: totalAmount });
   }
 
-  async function handleCard(data: any) {
+  async function handleCard() {
     if (!selectedExtras || !selectedProduct) return;
 
     if (!customerData.email || !customerData.name || !customerData.whatsapp) {
@@ -186,19 +186,7 @@
       theme: el.selectedTheme,
     }));
 
-    // console.log({
-    //   product: {
-    //     plan: selectedProduct.id,
-    //     extras: upsell,
-    //     quadros: quadros,
-    //   },
-    //   name: $checkoutStore.customerData.name,
-    //   whatsapp: $checkoutStore.customerData.whatsapp,
-    //   email: $checkoutStore.customerData.email,
-    //   card: data,
-    // });
-
-    await fetch(
+    const response = await fetch(
       "https://vxsoftware.space/api/v1/offers/quadro-pet/orders/paymentCard",
       {
         method: "POST",
@@ -212,10 +200,12 @@
           name: $checkoutStore.customerData.name,
           whatsapp: $checkoutStore.customerData.whatsapp,
           email: $checkoutStore.customerData.email,
-          card: data,
         }),
       },
     );
+
+    const d = await response.json();
+    return d.data.paymentUrl ?? "";
   }
 </script>
 
@@ -345,8 +335,16 @@
         {totalAmount}
         pixDiscount={0}
         onPix={() => handleSubmit()}
-        onCard={async (data) => {
-          handleCard(data);
+        onCard={async () => {
+          const url = await handleCard();
+          if (!url) {
+            alert(
+              "Não foi possível obter a url para o pagamento. Tente novamente mais tarde.",
+            );
+            return null;
+          }
+
+          return url;
         }}
       />
     </div>
