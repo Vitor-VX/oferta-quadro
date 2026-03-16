@@ -20,7 +20,7 @@
       icon: Shield,
       title: "Compra com Segurança",
       description:
-        "Pagamento via Pix com processamento criptografado e garantia de entrega imediata.",
+        "Pagamento  ou Cartão com processamento criptografado e garantia de entrega imediata.",
       accent: "gold",
     },
   ];

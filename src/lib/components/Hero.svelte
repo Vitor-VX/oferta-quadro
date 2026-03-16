@@ -45,14 +45,14 @@
       </div>
 
       <h1 class="title">
-        <span class="title-sub">Transforme uma foto em uma</span>
-        <span class="title-main">Obra-Prima</span>
-        <span class="title-end">do seu pet</span>
+        <span class="title-sub">Transforme a foto do seu pet em uma</span>
+        <span class="title-main">Arte</span>
+        <span class="title-end">digital personalizada</span>
       </h1>
 
       <p class="subtitle">
-        Enviou a foto, nós pintamos. Seu pet como nunca foi visto — em um
-        retrato digno de museu, no estilo dos Grandes Mestres.
+        Uma homenagem personalizada, enviada online para você imprimir e
+        emoldurar do seu jeito.
       </p>
 
       <div class="styles-row">
@@ -63,7 +63,7 @@
 
       <div class="cta-group">
         <button class="btn-primary" on:click={onStartCheckout}>
-          <span>Criar meu Quadro Agora</span>
+          <span>Quero minha arte digital</span>
           <ArrowRight size={18} />
         </button>
 
@@ -86,6 +86,10 @@
         <div class="trust-item">
           <span class="trust-icon">✦</span>
           <span>Arquivo em alta resolução</span>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">✦</span>
+          <span>Leva menos de 2 minutos para fazer seu pedido.</span>
         </div>
       </div>
     </div>

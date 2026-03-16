@@ -1,7 +1,7 @@
 <script lang="ts">
   import {
     Star,
-    Heart,
+    PawPrint,
     CheckCircle2,
     ChevronLeft,
     ChevronRight,
@@ -9,33 +9,31 @@
   } from "lucide-svelte";
 
   const reviews = [
-    // {
-    //   img: "https://files.botsync.site/casais/img_04.jpeg",
-    //   couple: "Luan & Grazi",
-    //   tag: "Eternizado",
-    // },
     {
-      img: "https://files.botsync.site/casais/img_01.jpg",
-      couple: "Fernanda & Samuel",
-      tag: "Presente Surpresa",
+      img: "https://files.botsync.site/quadros/img-sites/temas-clientes/prova-01.jpeg",
+      pet: "Thor",
+      tutor: "Mariana",
+      style: "Céu Épico",
     },
     {
-      img: "https://files.botsync.site/casais/img_03.jpeg",
-      couple: "Gustavo & Ana",
-      tag: "Presente Surpresa",
+      img: "https://files.botsync.site/quadros/img-sites/temas-clientes/prova-02.jpeg",
+      pet: "Mel",
+      tutor: "Rafael",
+      style: "Céu Épico",
     },
     {
-      img: "https://files.botsync.site/casais/img_05.jpeg",
-      couple: "Tati & Lucas",
-      tag: "Pedido de Namoro",
+      img: "https://files.botsync.site/quadros/img-sites/temas-clientes/prova-03.jpeg",
+      pet: "Camilinha",
+      tutor: "Camila",
+      style: "Céu Épico",
     },
   ];
 
-  let scrollContainer: HTMLDivElement;
+  let scrollContainer: HTMLDivElement | null = null;
 
   function scroll(direction: "left" | "right") {
     const amount = 320;
-    scrollContainer.scrollBy({
+    scrollContainer?.scrollBy({
       left: direction === "left" ? -amount : amount,
       behavior: "smooth",
     });
@@ -46,61 +44,85 @@
   <div class="container">
     <div class="text-center mb-8">
       <div class="badge-mini">
-        <Heart size={14} fill="currentColor" />
-        <span>Social Proof</span>
+        <PawPrint size={14} />
+        <span>Arte Digital</span>
       </div>
-      <h2 class="section-title">Quem já viveu esse amor</h2>
+
+      <h2 class="section-title">
+        Quem já eternizou <span>seu pet</span>
+      </h2>
+
       <p class="subtitle">
-        Veja como ficaram os certificados de alguns de nossos casais apaixonados
+        Veja algumas artes digitais personalizadas já entregues para nossos
+        clientes.
+      </p>
+
+      <p class="digital-note">
+        Produto 100% digital. Você recebe a arte online, pronta para imprimir e
+        emoldurar do seu jeito.
       </p>
     </div>
 
     <div class="carousel-wrapper">
-      <button class="nav-btn prev" on:click={() => scroll("left")}>
-        <ChevronLeft size={24} />
+      <button
+        class="nav-btn prev"
+        aria-label="Ver anteriores"
+        on:click={() => scroll("left")}
+      >
+        <ChevronLeft size={22} />
       </button>
 
       <div class="carousel-track" bind:this={scrollContainer}>
         {#each reviews as review}
           <div class="proof-card">
             <div class="image-container">
-              <img src={review.img} alt="Certificado do casal" />
+              <img src={review.img} alt={`Arte digital do pet ${review.pet}`} />
               <div class="overlay">
-                <!-- <span class="tag">{review.tag}</span> -->
+                <!-- <span class="tag">{review.style}</span> -->
               </div>
             </div>
+
             <div class="info">
               <div class="stars">
-                <Star size={14} fill="#ffb5a7" color="#ffb5a7" />
-                <Star size={14} fill="#ffb5a7" color="#ffb5a7" />
-                <Star size={14} fill="#ffb5a7" color="#ffb5a7" />
-                <Star size={14} fill="#ffb5a7" color="#ffb5a7" />
-                <Star size={14} fill="#ffb5a7" color="#ffb5a7" />
+                <Star size={14} fill="currentColor" />
+                <Star size={14} fill="currentColor" />
+                <Star size={14} fill="currentColor" />
+                <Star size={14} fill="currentColor" />
+                <Star size={14} fill="currentColor" />
               </div>
-              <h3>{review.couple}</h3>
+
+              <h3>{review.pet}</h3>
+              <p class="owner">Arte criada para {review.tutor}</p>
+
               <div class="verified">
                 <CheckCircle2 size={14} />
-                <span>Certificado Enviado</span>
+                <span>Arte digital enviada</span>
               </div>
             </div>
           </div>
         {/each}
       </div>
 
-      <button class="nav-btn next" on:click={() => scroll("right")}>
-        <ChevronRight size={24} />
+      <button
+        class="nav-btn next"
+        aria-label="Ver próximos"
+        on:click={() => scroll("right")}
+      >
+        <ChevronRight size={22} />
       </button>
     </div>
 
     <div class="footer-stats">
       <div class="stat">
-        <MessageSquare size={20} />
-        <span>Envio direto no WhatsApp</span>
+        <MessageSquare size={18} />
+        <span>Entrega digital no WhatsApp</span>
       </div>
+
       <div class="divider-dot"></div>
+
       <div class="stat">
-        <CheckCircle2 size={20} />
-        <span>Satisfação Garantida</span>
+        <CheckCircle2 size={18} />
+        <span>Alta resolução</span>
       </div>
     </div>
   </div>
@@ -108,53 +130,84 @@
 
 <style>
   .social-proof {
-    padding: 80px 0;
-    background: #fffafa;
+    padding: 88px 0;
+    background: #f8f6f2;
     overflow: hidden;
+  }
+
+  .container {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mb-8 {
+    margin-bottom: 2rem;
   }
 
   .badge-mini {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #ffe3e3;
-    color: #e63946;
-    padding: 6px 16px;
-    border-radius: 50px;
-    font-size: 0.8rem;
-    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: #efe8dc;
+    border: 1px solid #e2d7c3;
+    color: #6f5a3a;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: 15px;
+    margin-bottom: 18px;
   }
 
   .section-title {
-    font-family: "Great Vibes", cursive;
-    color: #5e0b15;
-    font-size: 3.5rem;
-    margin-bottom: 10px;
-    line-height: 1;
+    margin: 0 0 12px;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 0.95;
+    font-weight: 500;
+    color: #2f241f;
+    letter-spacing: -0.02em;
+  }
+
+  .section-title span {
+    font-style: italic;
+    color: #8f7447;
+    font-weight: 400;
   }
 
   .subtitle {
-    color: #8d5b5b;
-    font-size: 1.1rem;
-    max-width: 600px;
+    max-width: 700px;
+    margin: 0 auto 12px;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: #6d6258;
+  }
+
+  .digital-note {
+    max-width: 680px;
     margin: 0 auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #8a7865;
   }
 
   .carousel-wrapper {
     position: relative;
-    margin-top: 50px;
-    padding: 0 40px;
+    margin-top: 44px;
+    padding: 0 52px;
   }
 
   .carousel-track {
     display: flex;
-    gap: 25px;
+    gap: 24px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
-    padding: 20px 0;
+    padding: 10px 0 6px;
   }
 
   .carousel-track::-webkit-scrollbar {
@@ -162,74 +215,94 @@
   }
 
   .proof-card {
-    flex: 0 0 280px;
+    flex: 0 0 290px;
     scroll-snap-align: start;
-    background: white;
-    border-radius: 24px;
+    background: #fffdf9;
+    border: 1px solid #e9dfd1;
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 10px 25px rgba(74, 14, 14, 0.05);
-    border: 1px solid #feeafa;
-    transition: transform 0.3s ease;
+    box-shadow: 0 12px 30px rgba(47, 36, 31, 0.05);
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
 
   .proof-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    border-color: #dcc9a7;
+    box-shadow: 0 18px 36px rgba(47, 36, 31, 0.08);
   }
 
   .image-container {
     position: relative;
-    aspect-ratio: 9/14;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
+    width: 100%;
+    background: #f2ede4;
   }
 
   .image-container img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    display: block;
   }
 
   .overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+    inset: auto 0 0 0;
+    padding: 18px;
+    background: linear-gradient(to top, rgba(24, 19, 16, 0.7), transparent);
+    display: flex;
+    align-items: flex-end;
   }
 
   .tag {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 250, 242, 0.14);
+    border: 1px solid rgba(255, 250, 242, 0.28);
+    backdrop-filter: blur(6px);
+    color: #fffaf2;
+    font-size: 0.74rem;
     font-weight: 600;
   }
 
   .info {
-    padding: 20px;
+    padding: 18px 18px 20px;
     text-align: left;
   }
 
   .stars {
     display: flex;
-    gap: 2px;
-    margin-bottom: 8px;
+    gap: 3px;
+    margin-bottom: 10px;
+    color: #c6a46a;
   }
 
   .info h3 {
-    font-size: 1.1rem;
-    color: #4a0e0e;
-    margin-bottom: 5px;
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #2f241f;
+  }
+
+  .owner {
+    margin: 0 0 10px;
+    font-size: 0.92rem;
+    color: #7a6a5b;
+    line-height: 1.5;
   }
 
   .verified {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 5px;
-    color: #2f855a;
-    font-size: 0.8rem;
+    gap: 6px;
+    color: #6f5a3a;
+    font-size: 0.82rem;
     font-weight: 600;
   }
 
@@ -237,29 +310,35 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: white;
-    border: none;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid #dfd3c1;
+    background: rgba(255, 253, 249, 0.95);
+    box-shadow: 0 8px 18px rgba(47, 36, 31, 0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
-    color: #c9184a;
-    transition: all 0.3s;
+    z-index: 5;
+    color: #5a4635;
+    transition:
+      background 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease;
   }
 
   .nav-btn:hover {
-    background: #c9184a;
-    color: white;
+    background: #2f241f;
+    color: #f8f6f2;
+    border-color: #2f241f;
   }
 
   .prev {
     left: 0;
   }
+
   .next {
     right: 0;
   }
@@ -268,43 +347,59 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin-top: 50px;
+    gap: 18px;
+    margin-top: 40px;
+    flex-wrap: wrap;
   }
 
   .stat {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #8d5b5b;
+    color: #6d6258;
+    font-size: 0.92rem;
     font-weight: 600;
-    font-size: 0.9rem;
   }
 
   .divider-dot {
     width: 5px;
     height: 5px;
-    background: #ffccd5;
-    border-radius: 50%;
+    border-radius: 999px;
+    background: #cfb78e;
   }
 
   @media (max-width: 768px) {
+    .social-proof {
+      padding: 68px 0;
+    }
+
     .carousel-wrapper {
       padding: 0;
+      margin-top: 32px;
     }
+
     .nav-btn {
       display: none;
     }
-    .section-title {
-      font-size: 2.5rem;
-    }
+
     .proof-card {
       flex: 0 0 250px;
     }
+
+    .section-title {
+      font-size: 2.5rem;
+    }
+
+    .subtitle,
+    .digital-note {
+      font-size: 0.95rem;
+    }
+
     .footer-stats {
       flex-direction: column;
       gap: 10px;
     }
+
     .divider-dot {
       display: none;
     }

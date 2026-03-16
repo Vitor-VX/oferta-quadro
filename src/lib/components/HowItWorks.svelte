@@ -28,7 +28,7 @@
     {
       icon: DollarSign,
       number: "03",
-      title: "Pagamento via Pix",
+      title: "Pagamento via Pix ou Cartão",
       description: "Finalize com Pix de forma instantânea e totalmente segura.",
     },
     {
