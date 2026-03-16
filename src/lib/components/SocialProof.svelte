@@ -18,7 +18,7 @@
     {
       img: "https://files.botsync.site/quadros/img-sites/temas-clientes/prova-02.jpeg",
       pet: "Mel",
-      tutor: "Rafael",
+      tutor: "Lúcia",
       style: "Céu Épico",
     },
     {
