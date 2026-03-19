@@ -104,7 +104,12 @@
 
         <div class="carousel">
           {#each carrosel as image, i}
-            <img src={image} alt={styles[i]} class:active={i === current} />
+            <img
+              src={image}
+              alt={styles[i]}
+              class:active={i === current}
+              class:initial={i === 0}
+            />
           {/each}
         </div>
       </div>
