@@ -109,6 +109,8 @@
               alt={styles[i]}
               class:active={i === current}
               class:initial={i === 0}
+              loading={i === 0 ? "eager" : "lazy"}
+              fetchpriority={i === 0 ? "high" : "auto"}
             />
           {/each}
         </div>
