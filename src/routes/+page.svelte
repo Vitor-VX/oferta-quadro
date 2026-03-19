@@ -17,7 +17,7 @@
   } from "$lib/stores/checkoutStore";
   import { track } from "$lib/track/meta";
   import SocialProof from "$lib/components/SocialProof.svelte";
-  import TurnstileGuard from "$lib/components/TurnstileGuard.svelte";
+  // import TurnstileGuard from "$lib/components/TurnstileGuard.svelte";
 
   let showCheckout = false;
   let viewContentTracked = false;
@@ -92,14 +92,14 @@
     />
   </noscript>
 
-  <script
+  <!-- <script
     src="https://cdn.utmify.com.br/scripts/utms/latest.js"
     data-utmify-prevent-xcod-sck
     data-utmify-prevent-subids
     async
     defer
   >
-  </script>
+  </script> -->
 </svelte:head>
 
 {#if !showCheckout}
